@@ -1,9 +1,10 @@
 CREATE TABLE `User` (
   `Id` INT PRIMARY KEY AUTO_INCREMENT,
   `Name` VARCHAR(150),
-  `Password` VARCHAR(300),
   `Email` VARCHAR(100),
-  `BirthDate` DATE
+  `Password` VARCHAR(300),
+  `BirthDate` DATE,
+  `genre` INT,
 );
 
 CREATE TABLE `Category` (
