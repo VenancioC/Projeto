@@ -48,7 +48,8 @@ CREATE TABLE `Comment` (
 CREATE TABLE `PagePermissions` (
   `UserId` INT,
   `PageId` INT,
-  `PermissionId` INT
+  `PermissionId` INT,
+  PRIMARY KEY(UserId, PageId)
 );
 
 CREATE TABLE `PageFollows` (
