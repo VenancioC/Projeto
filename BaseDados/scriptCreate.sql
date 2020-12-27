@@ -5,7 +5,7 @@ CREATE TABLE `User` (
   `Email` VARCHAR(100),
   `Password` VARCHAR(300),
   `BirthDate` DATE,
-  `Genre` INT,
+  `Genre` INT
 );
 
 CREATE TABLE `Category` (
@@ -53,7 +53,8 @@ CREATE TABLE `PagePermissions` (
 
 CREATE TABLE `PageFollows` (
   `UserId` INT,
-  `PageId` INT
+  `PageId` INT,
+  PRIMARY KEY(UserId, PageId)
 );
 
 ALTER TABLE `Page` ADD FOREIGN KEY (`CategoryId`) REFERENCES `Category` (`Id`);
