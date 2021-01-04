@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
+
 require('dotenv').config();
 
 const app = express();
@@ -19,13 +20,18 @@ app.get("/", (req, res) => {
 });
 
 
-require("./app/routes/auth.routes.js")(app);
+//require("./app/routes/auth.routes.js")(app);
 require("./app/routes/user.routes.js")(app);
 require("./app/routes/category.routes.js")(app);
 require("./app/routes/page.routes.js")(app);
+require("./app/routes/post.routes.js")(app);
+require("./app/routes/comment.routes.js")(app);
+require("./app/routes/pagefollow.routes.js")(app);
+require("./app/routes/permission.routes.js")(app);
+require("./app/routes/pagepermission.routes.js")(app);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
-  console.log("Server is running on port 3000.");
+  console.log("Server is running on port 3001.");
 });
