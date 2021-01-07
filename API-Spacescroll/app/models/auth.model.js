@@ -1,0 +1,82 @@
+const sql = require("./db_mysql.js");
+const bcrypt = require("bcrypt");
+
+const jwt = require("jsonwebtoken");
+const { json } = require("body-parser");
+const config = require("../config/config");
+/*
+Interação com a base de dados utilizando os dados recebidos 
+*/
+
+// constructor
+
+// constructor
+const User = function (user) {
+  this.Name = user.Name;
+  this.Password = user.Password;
+  this.Email = user.Email;
+  this.BirthDate = user.BirthDate;
+};
+
+User.signup = (newUser, result) => {
+  bcrypt.hash(newUser.Password, config.saltRounds, function (err, hash) {
+    newUser.Password = hash;
+    sql.query(
+      "INSERT INTO User (Username, Name, Email, Password, BirthDate, Genre) VALUES (?, ?, ?, ?, ?, ?)",
+      [
+        newUser.Username,
+        newUser.Name,
+        newUser.Email,
+        newUser.Password,
+        newUser.BirthDate,
+        newUser.Genre,
+      ],
+      (err, res) => {
+        if (err) {
+          console.log("error: ", err);
+          result(err, null);
+          return;
+        }
+
+        console.log("created user: ", { id: res.insertId, ...newUser });
+        result(null, { id: res.insertId, ...newUser });
+      }
+    );
+  });
+};
+
+User.signin = (user, result) => {
+  sql.query(
+    "SELECT * FROM User WHERE Email =? LIMIT 1",
+    [user.Email],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.length) {
+        console.log("found user: ", res);
+
+        bcrypt.compare(user.Password, res[0].Password, function (err, bResult) {
+          if (!err && bResult) {
+            const token = jwt.sign({ id: res[0].Id }, config.secret, {
+              expiresIn: config.tokenExpTime,
+            });
+
+            result(null, token);
+          } else {
+            result(null, { token: "invalid" });
+          }
+        });
+        return;
+      }
+
+      // not found User with the id
+      result({ kind: "not_found" }, null);
+    }
+  );
+};
+
+module.exports = User;
