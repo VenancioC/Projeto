@@ -1,15 +1,33 @@
 const User = require("../models/user.model.js");
+const Validator = require("validatorjs");
 /*
-Validações e chamar os metodos do models
+validations and call methods
 */
+
+const validationRule = {
+  Username: "required|string",
+  Name: "required|string",
+  Email: "required|email",
+  Password: "required|string",
+  BirthDate: "date",
+  Genre: "integer",
+};
 
 // Create User
 exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
+  } else {
+    let validation = new Validator(req.body, validationRule);
+    if (!validation.passes()) {
+      res.status(422).send({
+        message: validation.errors.errors,
+      });
+      return;
+    }
   }
 
   // Create a User
@@ -19,20 +37,19 @@ exports.create = (req, res) => {
     Email: req.body.Email,
     Password: req.body.Password,
     BirthDate: req.body.BirthDate,
-    Genre: req.body.Genre
+    Genre: req.body.Genre,
   });
-
-  console.log(req.body);
-  console.log(user);
 
   // Save Customer in the database
   User.create(user, (err, data) => {
     if (err)
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the User."
+        message: err.message || "Some error occurred while creating the User.",
       });
-    else res.send(data);
+    else
+      res.status(200).send({
+        message: "User successfully created!",
+      });
   });
 };
 
@@ -41,8 +58,7 @@ exports.findAll = (req, res) => {
   User.getAll((err, data) => {
     if (err)
       res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving Users."
+        message: err.message || "Some error occurred while retrieving Users.",
       });
     else res.send(data);
   });
@@ -54,11 +70,11 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found User with id ${req.params.userId}.`
+          message: `Not found User with id ${req.params.userId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving User with id " + req.params.userId
+          message: "Error retrieving User with id " + req.params.userId,
         });
       }
     } else res.send(data);
@@ -70,29 +86,34 @@ exports.update = (req, res) => {
   // Validate Request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
+  } else {
+    let validation = new Validator(req.body, validationRule);
+
+    if (validation.fails()) {
+      res.status(422).send({
+        message: validation.errors.errors,
+      });
+    }
   }
 
-  console.log(req.body);
-
-  User.updateById(
-    req.params.userId,
-    new User(req.body),
-    (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          res.status(404).send({
-            message: `Not found User with id ${req.params.userId}.`
-          });
-        } else {
-          res.status(500).send({
-            message: "Error updating User with id " + req.params.userId
-          });
-        }
-      } else res.send(data);
-    }
-  );
+  User.updateById(req.params.userId, new User(req.body), (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found User with id ${req.params.userId}.`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error updating User with id " + req.params.userId,
+        });
+      }
+    } else
+      res.status(200).send({
+        message: err.message || "User successfully updated!",
+      });
+  });
 };
 
 // Delete a User with the specified userId in the request
@@ -101,13 +122,16 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found User with id ${req.params.userId}.`
+          message: `Not found User with id ${req.params.userId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Could not delete User with id " + req.params.userId
+          message: "Could not delete User with id " + req.params.userId,
         });
       }
-    } else res.send({ message: `User was deleted successfully!` });
+    } else
+      res.status(200).send({
+        message: "User successfully deleted!",
+      });
   });
 };

@@ -1,34 +1,47 @@
 const PageFollow = require("../models/pagefollow.model.js");
+const Validator = require("validatorjs");
 /*
-Validações e chamar os metodos do models
+validations and call models
 */
+
+const validationRule = {
+  UserId: "required|integer",
+  PageId: "required|integer",
+};
 
 // Create PageFollow
 exports.create = (req, res) => {
   // Validate request
   if (!req.body) {
     res.status(400).send({
-      message: "Content can not be empty!"
+      message: "Content can not be empty!",
     });
+  } else {
+    let validation = new Validator(req.body, validationRule);
+    if (!validation.passes()) {
+      res.status(422).send({
+        message: validation.errors.errors,
+      });
+      return;
+    }
   }
 
   // Create a PageFollow
   const pagefollow = new PageFollow({
     UserId: req.body.UserId,
-    PageId: req.body.PageId
+    PageId: req.body.PageId,
   });
-
-  console.log(req.body);
-  console.log(pagefollow);
 
   // Save PageFollow in the database
   PageFollow.create(pagefollow, (err, data) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while creating the PageFollow."
+          err.message || "Some error occurred while creating the PageFollow.",
       });
-    else res.send(data);
+      else res.status(200).send({
+        message: "Page Followed successfully!",
+      });
   });
 };
 
@@ -38,7 +51,7 @@ exports.findAll = (req, res) => {
     if (err)
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving Comments."
+          err.message || "Some error occurred while retrieving Comments.",
       });
     else res.send(data);
   });
@@ -50,11 +63,15 @@ exports.findOne = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found PageFollow with u: ${req.params.userId}  p: ${req.params.pageId}.`
+          message: `Not found PageFollow with u: ${req.params.userId}  p: ${req.params.pageId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving PageFollow with u: " + req.params.userId + "   p: " + req.params.pageId
+          message:
+            "Error retrieving PageFollow with u: " +
+            req.params.userId +
+            "   p: " +
+            req.params.pageId,
         });
       }
     } else res.send(data);
@@ -67,11 +84,11 @@ exports.findByUser = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found PageFollow for user ${req.params.userId}`
+          message: `Not found PageFollow for user ${req.params.userId}`,
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving PageFollow for user " + req.params.userId
+          message: "Error retrieving PageFollow for user " + req.params.userId,
         });
       }
     } else res.send(data);
@@ -84,11 +101,11 @@ exports.findByPage = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found PageFollow for page ${req.params.pageId}.`
+          message: `Not found PageFollow for page ${req.params.pageId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Error retrieving PageFollow for page " + req.params.pageId
+          message: "Error retrieving PageFollow for page " + req.params.pageId,
         });
       }
     } else res.send(data);
@@ -101,13 +118,19 @@ exports.delete = (req, res) => {
     if (err) {
       if (err.kind === "not_found") {
         res.status(404).send({
-          message: `Not found PageFollow with user ${req.params.userId} e page ${req.params.pageId}.`
+          message: `Not found PageFollow with user ${req.params.userId} e page ${req.params.pageId}.`,
         });
       } else {
         res.status(500).send({
-          message: "Could not delete PageFollow with user " + req.params.userId + " e page " + req.params.pageId
+          message:
+            "Could not delete PageFollow with user " +
+            req.params.userId +
+            " e page " +
+            req.params.pageId,
         });
       }
-    } else res.send({ message: `PageFollow was deleted successfully!` });
+    }  else res.status(200).send({
+      message: "Page Follow successfully deleted!",
+    });
   });
 };

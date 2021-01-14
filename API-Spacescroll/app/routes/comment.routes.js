@@ -11,7 +11,7 @@ module.exports = app => {
   app.get("/comments/:commentId", comments.findOne);
 
   // Retrieve Comments by PostId 
-  app.get("/comments/post/:postId", comments.findByPost);
+  app.get("/comments/posts/:postId", comments.findByPost);
 
   // Update a Comment with commentId ->
   app.put("/comments/:commentId", comments.update);

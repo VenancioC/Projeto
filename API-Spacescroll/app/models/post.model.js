@@ -44,7 +44,7 @@ Post.getAll = result => {
 Post.findById = (postId, result) => {
   console.log(postId);
   sql.query("SELECT * FROM Post WHERE id =?"
-    , [PostId]
+    , [postId]
     , (err, res) => {
       if (err) {
         console.log("error: ", err);

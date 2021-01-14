@@ -8,10 +8,10 @@ module.exports = app => {
   app.get("/pagefollows", pagefollows.findAll);
 
   // Retrieve all PageFollows with userId
-  app.get("/pagefollows/user/:userId", pagefollows.findByUser);
+  app.get("/pagefollows/users/:userId", pagefollows.findByUser);
 
   // Retrieve all PageFollows with pageId
-  app.get("/pagefollows/page/:pageId", pagefollows.findByPage);
+  app.get("/pagefollows/pages/:pageId", pagefollows.findByPage);
 
   // Retrieve a single PageFollows with userId and pageId
   app.get("/pagefollows/:userId/:pageId", pagefollows.findOne);
