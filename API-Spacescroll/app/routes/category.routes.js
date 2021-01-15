@@ -1,18 +1,18 @@
 module.exports = app => {
-  const categorys = require("../controllers/category.controller.js");
+  const categories = require("../controllers/category.controller.js");
 
-  // Create a new Category -> Registo
-  app.post("/categorys", categorys.create);
+  // Create a new Category
+  app.post("/categories", categories.create);
 
-  // Retrieve all Categorys
-  app.get("/categorys", categorys.findAll);
+  // Retrieve all Categories
+  app.get("/categories", categories.findAll);
 
   // Retrieve a single Category with categoryId
-  app.get("/categorys/:categoryId", categorys.findOne);
+  app.get("/categories/:categoryId", categories.findOne);
 
   // Update a Category with categoryId ->
-  app.put("/categorys/:categoryId", categorys.update);
+  app.put("/categories/:categoryId", categories.update);
 
   // Delete a Category with categoryId
-  app.delete("/categorys/:categoryId", categorys.delete);
+  app.delete("/categories/:categoryId", categories.delete);
 };

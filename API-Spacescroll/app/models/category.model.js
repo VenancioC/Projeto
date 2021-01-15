@@ -1,9 +1,6 @@
 const sql = require("./db_mysql.js");
 
-/*
-Interação com a base de dados utilizando os dados recebidos 
-*/
-
+//Interaction with data base 
 
 // constructor
 const Category = function (category) {
@@ -33,7 +30,7 @@ Category.getAll = result => {
         return;
       }
   
-      console.log("categorys: ", res);
+      console.log("categories: ", res);
       result(null, res);
   });
 };
