@@ -1,61 +1,67 @@
 CREATE TABLE `User` (
   `Id` INT PRIMARY KEY AUTO_INCREMENT,
-  `Username` VARCHAR(80),
-  `Name` VARCHAR(150),
-  `Email` VARCHAR(100),
-  `Password` VARCHAR(300),
+  `Username` VARCHAR(80) UNIQUE NOT NULL,
+  `Name` VARCHAR(150) NOT NULL,
+  `Email` VARCHAR(100) UNIQUE NOT NULL,
+  `Password` VARCHAR(300) NOT NULL,
   `BirthDate` DATE,
   `Genre` INT
 );
 
 CREATE TABLE `Category` (
   `Id` INT PRIMARY KEY AUTO_INCREMENT,
-  `Category` VARCHAR(150)
+  `Category` VARCHAR(150) UNIQUE NOT NULL 
 );
 
 CREATE TABLE `Permission` (
   `Id` INT PRIMARY KEY AUTO_INCREMENT,
-  `Description` VARCHAR(150)
+  `Description` VARCHAR(150) UNIQUE NOT NULL
 );
 
 CREATE TABLE `Page` (
   `Id` INT PRIMARY KEY AUTO_INCREMENT,
-  `Name` VARCHAR(150),
+  `Name` VARCHAR(150) NOT NULL,
   `Description` TEXT,
   `CategoryId` INT,
-  `UserId` INT,
-  `Followers` INT
+  `UserId` INT NOT NULL,
+  `Followers` INT DEFAULT 0
 );
 
 CREATE TABLE `Post` (
   `Id` INT PRIMARY KEY AUTO_INCREMENT,
-  `Title` VARCHAR(150),
+  `Title` VARCHAR(150) NOT NULL,
   `Description` TEXT,
-  `Date` DATETIME,
-  `UserId` INT,
-  `PageId` INT
+  `Date` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `UserId` INT NOT NULL,
+  `PageId` INT NOT NULL
 );
 
 CREATE TABLE `Comment` (
   `Id` INT PRIMARY KEY AUTO_INCREMENT,
-  `Text` TEXT,
-  `Date` DATETIME,
+  `Text` TEXT NOT NULL,
+  `Date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `CommentId` INT,
-  `UserId` INT,
-  `PostId` INT
+  `UserId` INT NOT NULL,
+  `PostId` INT NOT NULL
 );
 
 CREATE TABLE `PagePermissions` (
-  `UserId` INT,
-  `PageId` INT,
-  `PermissionId` INT,
+  `UserId` INT NOT NULL,
+  `PageId` INT NOT NULL,
+  `PermissionId` INT NOT NULL,
   PRIMARY KEY(UserId, PageId)
 );
 
 CREATE TABLE `PageFollows` (
-  `UserId` INT,
-  `PageId` INT,
+  `UserId` INT NOT NULL,
+  `PageId` INT NOT NULL,
   PRIMARY KEY(UserId, PageId)
+);
+
+CREATE TABLE `PostLikes` (
+  `PostId` INT NOT NULL,
+  `UserId` INT NOT NULL,
+  PRIMARY KEY(PostId, UserId)
 );
 
 ALTER TABLE `Page` ADD FOREIGN KEY (`CategoryId`) REFERENCES `Category` (`Id`);
@@ -81,3 +87,7 @@ ALTER TABLE `PagePermissions` ADD FOREIGN KEY (`PermissionId`) REFERENCES `Permi
 ALTER TABLE `PageFollows` ADD FOREIGN KEY (`UserId`) REFERENCES `User` (`Id`);
 
 ALTER TABLE `PageFollows` ADD FOREIGN KEY (`PageId`) REFERENCES `Page` (`Id`);
+
+ALTER TABLE `PostLikes` ADD FOREIGN KEY (`PostId`) REFERENCES `Post` (`Id`);
+
+ALTER TABLE `PostLikes` ADD FOREIGN KEY (`UserId`) REFERENCES `User` (`Id`);
