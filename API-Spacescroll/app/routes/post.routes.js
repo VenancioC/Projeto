@@ -10,8 +10,14 @@ module.exports = app => {
   // Retrieve all Posts
   app.get("/posts", posts.findAll);
 
+  app.get("/posts/recent", posts.findRecents);
+
   // Retrieve a single Post with postsId 
   app.get("/posts/:postId", posts.findOne);
+
+  app.get("/posts/user/:userId", posts.findFeedByUser);
+
+  app.get("/posts/page/:pageId", posts.findByPage);
 
   // Update a Post with postId ->
   app.put("/posts/:postId", isAuthenticated, posts.update);

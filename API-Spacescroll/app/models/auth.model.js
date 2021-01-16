@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const { json } = require("body-parser");
 const config = require("../config/config");
 /*
-Interação com a base de dados utilizando os dados recebidos 
+Interact with DB
 */
 
 // constructor
@@ -16,33 +16,6 @@ const User = function (user) {
   this.Password = user.Password;
   this.Email = user.Email;
   this.BirthDate = user.BirthDate;
-};
-
-User.signup = (newUser, result) => {
-  bcrypt.hash(newUser.Password, config.saltRounds, function (err, hash) {
-    newUser.Password = hash;
-    sql.query(
-      "INSERT INTO User (Username, Name, Email, Password, BirthDate, Genre) VALUES (?, ?, ?, ?, ?, ?)",
-      [
-        newUser.Username,
-        newUser.Name,
-        newUser.Email,
-        newUser.Password,
-        newUser.BirthDate,
-        newUser.Genre,
-      ],
-      (err, res) => {
-        if (err) {
-          console.log("error: ", err);
-          result(err, null);
-          return;
-        }
-
-        console.log("created user: ", { id: res.insertId, ...newUser });
-        result(null, { id: res.insertId, ...newUser });
-      }
-    );
-  });
 };
 
 User.signin = (user, result) => {

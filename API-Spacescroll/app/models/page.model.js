@@ -1,7 +1,7 @@
 const sql = require("./db_mysql.js");
 
 /*
-Interação com a base de dados utilizando os dados recebidos 
+Interact with DB
 */
 
 // constructor

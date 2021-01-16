@@ -1,7 +1,7 @@
 const sql = require("./db_mysql.js");
 
 /*
-Interação com a base de dados utilizando os dados recebidos 
+Interact with DB
 */
 
 // constructor
@@ -66,7 +66,7 @@ Comment.findById = (commentId, result) => {
 
 Comment.findByPostId = (postId, result) => {
   console.log(postId);
-  sql.query("SELECT * FROM Comment WHERE PostId =?"
+  sql.query("SELECT * FROM Comment WHERE PostId =? ORDER BY Date DESC"
     , [postId]
     , (err, res) => {
       if (err) {

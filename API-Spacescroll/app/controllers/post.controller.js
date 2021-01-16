@@ -78,6 +78,48 @@ exports.findOne = (req, res) => {
   });
 };
 
+exports.findFeedByUser = (req, res) => {
+  Post.getFeedByUser(req.params.userId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Posts to show`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Posts ",
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+exports.findByPage = (req, res) => {
+  Post.getByPage(req.params.pageId, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Posts to show`,
+        });
+      } else {
+        res.status(500).send({
+          message: "Error retrieving Posts ",
+        });
+      }
+    } else res.send(data);
+  });
+};
+
+exports.findRecents = (req, res) => {
+  Post.getRecents((err, data) => {
+    if (err)
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving Posts.",
+      });
+    else res.send(data);
+  });
+};
+
 // Update a Post identified by the postId in the request
 exports.update = (req, res) => {
   // Validate Request
