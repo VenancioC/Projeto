@@ -3,7 +3,7 @@ const sql = require("./db_mysql.js");
 const bcrypt = require('bcrypt');
 const config = require('../config/config');
 /*
-Interação com a base de dados utilizando os dados recebidos 
+Interact with DB
 */
 
 // constructor

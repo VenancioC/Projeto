@@ -21,10 +21,13 @@ app.use(bodyParser.json());
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to node-server application." });
 });
+
+
 
 require("./app/routes/auth.routes.js")(app);
 require("./app/routes/user.routes.js")(app);
@@ -35,6 +38,7 @@ require("./app/routes/comment.routes.js")(app);
 require("./app/routes/pagefollow.routes.js")(app);
 require("./app/routes/permission.routes.js")(app);
 require("./app/routes/pagepermission.routes.js")(app);
+require("./app/routes/postlikes.routes.js")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 3001;

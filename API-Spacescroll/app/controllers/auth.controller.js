@@ -36,7 +36,7 @@ exports.signin = (req, res) => {
   Auth.signin(user, (err, data) => {
     if (err)
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the User.",
+        message: err.message || "Some error occurred while Signin.",
       });
     else {
       res.send(data);

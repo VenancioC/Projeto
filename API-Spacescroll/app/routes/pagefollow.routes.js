@@ -19,7 +19,7 @@ module.exports = app => {
   // Retrieve a single PageFollows with userId and pageId
   app.get("/pagefollows/:userId/:pageId", isAuthenticated, pagefollows.findOne);
 
-  // Dont have update
+  // Don't have update
 
   // Delete a PageFollows with userId and pageId
   app.delete("/pagefollows/:userId/:pageId", isAuthenticated, pagefollows.delete);

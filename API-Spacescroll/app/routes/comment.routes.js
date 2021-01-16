@@ -1,6 +1,9 @@
 module.exports = app => {
   const comments = require("../controllers/comment.controller.js");
 
+  const isAuthenticated = require("../isAuthenticated");
+
+
   // Create a new Comment
   app.post("/comments", isAuthenticated, comments.create);
 
