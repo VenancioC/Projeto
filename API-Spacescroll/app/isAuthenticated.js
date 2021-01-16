@@ -1,14 +1,23 @@
 const jwt = require("jsonwebtoken");
 const config = require("./config/config");
 
-module.exports =  (req, res, next) => {
-    jwt.verify(req.cookies.auth, config.secret, async function (err, decoded) {
-      if (!err && decoded) {
-        next();
-      } else {
-        res
-          .status("401")
-          .json({ message: "Sorry you are not authenticated :(" });
-      }
-    });
-  };
+module.exports = (req, res, next) => {
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer ")
+  ) {
+    token = req.headers.authorization.split("Bearer ")[1];
+  } else {
+    console.error("No token found");
+    return res.status("401").json({ message: "Sorry you are not authenticated :(" });
+  }
+
+  jwt.verify(token, config.secret, async function (err, decoded) {
+    if (!err && decoded) {
+      next();
+    } else {
+      res.status("401").json({ message: "Sorry you are not authenticated :(" });
+    }
+  });
+};
