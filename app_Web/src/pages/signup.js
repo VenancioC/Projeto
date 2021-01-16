@@ -53,14 +53,6 @@ function getAge(dateString) {
 
 export default function SignUp() {
   const classes = useStyles();
-  const [data, setData] = useState({
-    Name: "",
-    Username: "",
-    Email: "",
-    Genre: "",
-    BirthDate: "",
-    Password: "",
-  });
 
   const validate = (values) => {
     const errors = {};
@@ -86,15 +78,15 @@ export default function SignUp() {
 
     if (!values.BirthDate) {
       errors.BirthDate = "Required";
-    } else if (getAge(values.BirthDate) < 18){
+    } /* else if (getAge(values.BirthDate) < 18){
       errors.BirthDate = "Must be over 18 years old"
     }
-
+ */
     if (!values.Password) {
       errors.Password = "Required";
-    } else if (values.Password.length < 8) {
+    } /* else if (values.Password.length < 8) {
       errors.Password = "Must be at least 8 characters";
-    }
+    } */
     return errors;
   };
 
@@ -112,7 +104,7 @@ export default function SignUp() {
       console.log(values);
 
       axios
-      .post("http://localhost:3001/auth/signup", data)
+      .post("http://localhost:3001/auth/signup", values)
       .then(function (response) {
         console.log(response);
         

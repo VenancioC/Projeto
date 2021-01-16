@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState, Router } from "react";
+import { useRouter } from 'next/router'
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useFormik } from "formik";
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignInSide() {
   const classes = useStyles();
+  const router = useRouter()
 
   const validate = (values) => {
     const errors = {};
@@ -66,9 +67,9 @@ export default function SignInSide() {
 
     if (!values.Password) {
       errors.Password = "Required";
-    } else if (values.Password.length < 8) {
+    } /* else if (values.Password.length < 1) {
       errors.Password = "Must be at least 8 characters";
-    }
+    } */
 
     return errors;
   };
@@ -87,9 +88,9 @@ export default function SignInSide() {
         .then(function (response) {
           console.log(response.data);
 
-          Cookies.set("auth", response.data);
+          Cookies.set("token", response.data);
 
-          Router.push("/");
+          router.push("/");
         })
         .catch(function (error) {
           console.log(error);
@@ -127,7 +128,7 @@ export default function SignInSide() {
               onChange={formik.handleChange}
               value={formik.values.firstName}
             />
-            {formik.errors.Email ? <div>{formik.errors.Email}</div> : null}
+            {formik.errors.Email && <div>{formik.errors.Email}</div>}
             <TextField
               variant="outlined"
               margin="normal"
@@ -141,9 +142,9 @@ export default function SignInSide() {
               onChange={formik.handleChange}
               value={formik.values.firstName}
             />
-            {formik.errors.Password ? (
+            {formik.errors.Password && (
               <div>{formik.errors.Password}</div>
-            ) : null}
+            )}
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
