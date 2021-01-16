@@ -1,3 +1,4 @@
+const Comment = require("../models/comment.model");
 const Validator = require("validatorjs");
 /*
 validations and call models
