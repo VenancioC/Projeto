@@ -8,10 +8,10 @@ module.exports = app => {
   app.post("/comments", isAuthenticated, comments.create);
 
   // Retrieve all Comments
-  app.get("/comments", isAuthenticated, comments.findAll);
+  app.get("/comments", comments.findAll);
 
   // Retrieve a single Comment with commentId 
-  app.get("/comments/:commentId", isAuthenticated, comments.findOne);
+  app.get("/comments/:commentId",  comments.findOne);
 
   // Retrieve Comments by PostId 
   app.get("/comments/posts/:postId", comments.findByPost);

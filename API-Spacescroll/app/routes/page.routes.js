@@ -8,10 +8,10 @@ module.exports = app => {
   app.post("/pages", isAuthenticated, pages.create);
 
   // Retrieve all Pages
-  app.get("/pages", isAuthenticated, pages.findAll);
+  app.get("/pages", pages.findAll);
 
   // Retrieve a single Page with pageId
-  app.get("/pages/:pageId", isAuthenticated, pages.findOne);
+  app.get("/pages/:pageId", pages.findOne);
 
   // Update a Page with pageId ->
   app.put("/pages/:pageId", isAuthenticated, pages.update);
