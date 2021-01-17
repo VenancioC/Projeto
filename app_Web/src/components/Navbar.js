@@ -1,5 +1,5 @@
 import React from "react";
-import { fade, makeStyles } from "@material-ui/core/styles";
+import { fade, makeStyles, Button } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -8,12 +8,18 @@ import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import Link from 'next/link';
+import CreateIcon from '@material-ui/icons/Create';
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import Cookies from "js-cookie";
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -27,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
+    cursor: "pointer",
   },
   search: {
     position: "relative",
@@ -115,10 +122,17 @@ const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+      <MenuItem
+      onClick={handleMenuClose}
+      //href=".\profile"
+      //component={Link} to="/profile"
+      //linkButton={true} href="./profile"
+      >Profile
+      </MenuItem>
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
+  const router = useRouter();
 
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
@@ -173,9 +187,13 @@ const Navbar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
+
+          <Link href="/" >
+          <Typography className={classes.title} variant="h6" noWrap >
             SpaceScroll
           </Typography>
+          </Link>
+
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -189,13 +207,24 @@ const Navbar = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
+          {/* euiwrwheferrrrerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr */}
+          <IconButton
+              aria-label="create"
+              aria-controls={mobileMenuId}
+              aria-haspopup="true"
+              color="inherit"
+              href=".\PublicationForm"
+            >
+              <CreateIcon />
+            </IconButton>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton aria-label="show 777 new mails" color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <MailIcon />
               </Badge>
             </IconButton>
+            
             <IconButton aria-label="show 17 new notifications" color="inherit">
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
@@ -211,7 +240,9 @@ const Navbar = () => {
             >
               <AccountCircle />
             </IconButton>
+
           </div>
+
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
