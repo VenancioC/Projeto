@@ -33,7 +33,9 @@ CREATE TABLE `Post` (
   `Description` TEXT,
   `Date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `UserId` INT NOT NULL,
-  `PageId` INT NOT NULL
+  `PageId` INT NOT NULL,
+  `Likes` INT NOT NULL DEFAULT 0,
+  `Comments` INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `Comment` (
