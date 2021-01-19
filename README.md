@@ -1,1 +1,3 @@
 Projeto
+
+node server.js

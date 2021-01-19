@@ -34,7 +34,7 @@ User.signin = (user, result) => {
 
         bcrypt.compare(user.Password, res[0].Password, function (err, bResult) {
           if (!err && bResult) {
-            const token = jwt.sign({ id: res[0].Id }, config.secret, {
+            const token = jwt.sign({ Id: res[0].Id }, config.secret, {
               expiresIn: config.tokenExpTime,
             });
 
