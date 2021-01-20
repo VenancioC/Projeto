@@ -8,8 +8,8 @@ import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import Link from 'next/link';
-import CreateIcon from '@material-ui/icons/Create';
+import Link from "next/link";
+import CreateIcon from "@material-ui/icons/Create";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -17,12 +17,16 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Cookies from "js-cookie";
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
-  grow: {
+  ClearLink: {
+    "&:a": {
+      textdecoration: "none",
+    },  
+  },
+   grow: {
     flexGrow: 1,
   },
   menuButton: {
@@ -89,26 +93,21 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [anchorCreate, setanchorCreate] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isCreateOpen = Boolean(anchorCreate);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleCreateMenuOpen = (event) => {
+    setanchorCreate(event.currentTarget);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+    setanchorCreate(null);
   };
 
   const menuId = "primary-search-account-menu";
@@ -122,55 +121,36 @@ const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem
-      onClick={handleMenuClose}
-      //href=".\profile"
-      //component={Link} to="/profile"
-      //linkButton={true} href="./profile"
-      >Profile
+      
+      <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
+      <Link href="./profile">
+      Profile
+      </Link> 
       </MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>Signout</MenuItem>
     </Menu>
   );
-  const router = useRouter();
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
+  const CreateId = "primary-search-Create-menu";
+  const CreateMenu = (
     <Menu
-      anchorEl={mobileMoreAnchorEl}
+      anchorEl={anchorCreate}
       anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      id={mobileMenuId}
+      id={CreateId}
       keepMounted
       transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+      open={isCreateOpen}
+      onClose={handleMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
+      <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
+        <Link href="./PagesForm">
+         Create Page
+        </Link>       
+        </MenuItem>
+      <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
+      <Link href="./PublicationForm">
+         Create Post
+        </Link>  
       </MenuItem>
     </Menu>
   );
@@ -187,13 +167,11 @@ const Navbar = () => {
           >
             <MenuIcon />
           </IconButton>
-
-          <Link href="/" >
-          <Typography className={classes.title} variant="h6" noWrap >
-            SpaceScroll
-          </Typography>
+          <Link href="/">
+            <Typography className={classes.title} variant="h6" noWrap>
+              SpaceScroll
+            </Typography>
           </Link>
-
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -207,57 +185,30 @@ const Navbar = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          {/* euiwrwheferrrrerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr */}
           <IconButton
-              aria-label="create"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              color="inherit"
-              href=".\PublicationForm"
-            >
-              <CreateIcon />
-            </IconButton>
+            aria-label="create"
+            aria-controls={CreateId}
+            aria-haspopup="true"
+            color="inherit"
+            onClick={handleCreateMenuOpen}
+          >
+            <CreateIcon />
+          </IconButton>{" "}
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 777 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-
-          </div>
-
-          <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
-              <MoreIcon />
-            </IconButton>
-          </div>
+          <IconButton
+            edge="end"
+            aria-label="account of current user"
+            aria-controls={menuId}
+            aria-haspopup="true"
+            onClick={handleProfileMenuOpen}
+            color="inherit"
+          >
+            <AccountCircle />
+          </IconButton>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
       {renderMenu}
+      {CreateMenu}
     </div>
   );
 };
