@@ -12,7 +12,10 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar'
+import jwt from "jsonwebtoken";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   posts: {
@@ -47,5 +50,26 @@ export default function Index({ ctx }) {
 Index.getInitialProps = async (ctx) => {
   const res = await fetch("http://localhost:3001/posts");
   const json = await res.json();
+  return { ctx: json };
+};
+
+
+Index.getInitialProps = async (context) => {
+  const token = context.req ? context.req.cookies.token : Cookies.get("token");
+  let json = [];
+  let datas = jwt.decode(token);
+  if (!token) {
+    const res = await axios.get("http://localhost:3001/posts/recent");
+    json = res.data;
+  } else {
+    const res = await axios.get("http://localhost:3001/posts/user/"+ datas.Id, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    json = res.data;
+  }
   return { ctx: json };
 };
