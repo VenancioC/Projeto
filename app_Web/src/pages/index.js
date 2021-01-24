@@ -29,17 +29,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Index({ ctx }) {
+export default function Index({ postData }) {
   const classes = useStyles();
 
   return (
     <div>
       <Navbar />
       <CssBaseline />
-      <Grid item xs={12} sm={8} md={5} className={classes.posts}>
+      <Grid item xs={12} sm={9} md={9} className={classes.posts}>
         <div className={classes.paper}>
-          {ctx.map((e, i) => (
-            <Post ctx={e} />
+          {postData && postData.map((e, i) => (
+            <Post key={i} postData={e} />
           ))}
         </div>
       </Grid>
@@ -47,22 +47,15 @@ export default function Index({ ctx }) {
   );
 }
 
-Index.getInitialProps = async (ctx) => {
-  const res = await fetch("http://localhost:3001/posts");
-  const json = await res.json();
-  return { ctx: json };
-};
-
-
 Index.getInitialProps = async (context) => {
   const token = context.req ? context.req.cookies.token : Cookies.get("token");
   let json = [];
-  let datas = jwt.decode(token);
+  let data = jwt.decode(token);
   if (!token) {
     const res = await axios.get("http://localhost:3001/posts/recent");
     json = res.data;
   } else {
-    const res = await axios.get("http://localhost:3001/posts/user/"+ datas.Id, {
+    const res = await axios.get("http://localhost:3001/posts/user/"+ data.Id, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -71,5 +64,5 @@ Index.getInitialProps = async (context) => {
     });
     json = res.data;
   }
-  return { ctx: json };
+  return { postData: json };
 };

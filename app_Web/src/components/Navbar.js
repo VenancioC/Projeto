@@ -1,5 +1,5 @@
 import React from "react";
-import { fade, makeStyles, Button } from "@material-ui/core/styles";
+import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -9,6 +9,7 @@ import Badge from "@material-ui/core/Badge";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Link from "next/link";
+import Image from "next/image";
 import CreateIcon from "@material-ui/icons/Create";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
@@ -19,14 +20,17 @@ import MoreIcon from "@material-ui/icons/MoreVert";
 import Cookies from "js-cookie";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { Container, Button } from "@material-ui/core";
+import jwt from "jsonwebtoken";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 
 const useStyles = makeStyles((theme) => ({
   ClearLink: {
     "&:a": {
       textdecoration: "none",
-    },  
+    },
   },
-   grow: {
+  grow: {
     flexGrow: 1,
   },
   menuButton: {
@@ -88,12 +92,19 @@ const useStyles = makeStyles((theme) => ({
       display: "none",
     },
   },
+  buttonsAuth: {
+    marginLeft: "15px", 
+  },
 }));
 
 const Navbar = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorCreate, setanchorCreate] = React.useState(null);
+
+  const token = Cookies.get("token");
+
+  let data = jwt.decode(token);
 
   const isMenuOpen = Boolean(anchorEl);
   const isCreateOpen = Boolean(anchorCreate);
@@ -121,13 +132,12 @@ const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      
       <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
-      <Link href="./profile">
-      Profile
-      </Link> 
+        <Link href="./profile">Profile</Link>
       </MenuItem>
-      <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>Signout</MenuItem>
+      <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
+        Signout
+      </MenuItem>
     </Menu>
   );
 
@@ -143,14 +153,10 @@ const Navbar = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
-        <Link href="./PagesForm">
-         Create Page
-        </Link>       
-        </MenuItem>
+        <Link href="./PagesForm">Create Page</Link>
+      </MenuItem>
       <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
-      <Link href="./PublicationForm">
-         Create Post
-        </Link>  
+        <Link href="./PublicationForm">Create Post</Link>
       </MenuItem>
     </Menu>
   );
@@ -159,19 +165,14 @@ const Navbar = () => {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Link href="/">
-            <Typography className={classes.title} variant="h6" noWrap>
-              SpaceScroll
-            </Typography>
-          </Link>
+          <a href="/">
+            <Image
+              src="/icon.png"
+              alt="Picture of the author"
+              width={67}
+              height={48}
+            />
+          </a>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -185,26 +186,40 @@ const Navbar = () => {
               inputProps={{ "aria-label": "search" }}
             />
           </div>
-          <IconButton
-            aria-label="create"
-            aria-controls={CreateId}
-            aria-haspopup="true"
-            color="inherit"
-            onClick={handleCreateMenuOpen}
-          >
-            <CreateIcon />
-          </IconButton>{" "}
+          {data && (
+            <IconButton
+              aria-label="create"
+              aria-controls={CreateId}
+              aria-haspopup="true"
+              color="inherit"
+              onClick={handleCreateMenuOpen}
+            >
+              <CreateIcon />
+            </IconButton>
+          )}
           <div className={classes.grow} />
-          <IconButton
-            edge="end"
-            aria-label="account of current user"
-            aria-controls={menuId}
-            aria-haspopup="true"
-            onClick={handleProfileMenuOpen}
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
+          {data ? (
+            <IconButton
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+            >
+              <Typography>{data.Username}</Typography>
+              <ArrowDropDownIcon />
+            </IconButton>
+          ) : (
+            <div>
+              <Button variant="contained" color="default" href="/auth/signin" className={ classes.buttonsAuth }>
+                Sign in
+              </Button>
+              <Button variant="contained" color="default" href="/auth/signup" className={ classes.buttonsAuth }>
+                Sign up
+              </Button>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
       {renderMenu}

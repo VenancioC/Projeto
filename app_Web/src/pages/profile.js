@@ -1,8 +1,4 @@
-import {
-  Typography,
-  CssBaseline,
-  Container,
-} from "@material-ui/core";
+import { Typography, CssBaseline, Container } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -12,8 +8,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import jwt from 'jsonwebtoken'
-
+import jwt from "jsonwebtoken";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -64,8 +59,8 @@ export default function Profile({ Userdata }) {
   }, [Cookies.get("token")]);
 
   const redirect = () => {
-    router.push('./updateprofile')
-  }
+    router.push("./updateprofile");
+  };
 
   const classes = useStyles();
   return (
@@ -95,7 +90,13 @@ export default function Profile({ Userdata }) {
                 Email.: {Userdata.Email}
               </Typography>
             </CardContent>
-            <Button onClick={redirect} type="submit" fullWidth variant="contained" color="primary">
+            <Button
+              onClick={redirect}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+            >
               Change
             </Button>
           </Card>
@@ -109,10 +110,9 @@ Profile.getInitialProps = async (context) => {
   const token = context.req ? context.req.cookies.token : Cookies.get("token");
   let json = [];
   let datas = jwt.decode(token);
-  console.log(token);
-  //console.log(ctx);
+
   if (token) {
-    const res = await axios.get("http://localhost:3001/users/"+ datas.Id, {
+    const res = await axios.get("http://localhost:3001/users/" + datas.Id, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
@@ -122,14 +122,11 @@ Profile.getInitialProps = async (context) => {
     console.log(token);
     json = res.data;
   } else {
-
     if (context.res) {
       context.res.writeHead(301, { Location: "signin" });
       context.res.end();
       return {};
     }
-    Router.push("/signin");
-    return {};
   }
   return { Userdata: json[0] };
 };
