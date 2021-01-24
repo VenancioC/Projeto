@@ -1,21 +1,24 @@
 import {
   Typography,
   Link,
-  Box,
   CssBaseline,
   Container,
   Grid,
+  Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Divider from "@material-ui/core/Divider";
 import dateFormat from "dateformat";
-import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import ThumbUpOutlinedIcon from "@material-ui/icons/ThumbUpOutlined";
+import Like from "../components/Like";
 import ChatBubbleIcon from "@material-ui/icons/ChatBubble";
+import { useState } from "react";
+import Cookies from "js-cookie";
+import jwt from "jsonwebtoken";
+import axios from "axios";
+import NoPost from "./NoPosts";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,38 +52,119 @@ const useStyles = makeStyles((theme) => ({
   subheading: {
     lineHeight: 1.8,
   },
-  likesComment: {
-    height: "100%",
-    width: "100%",
-    margin: "auto",
+  button: {
+    textAlign: "Center",
   },
 }));
 
-const Post = (props) => {
-  console.log(props);
-  let like;
-  if (1 == 1) {
-    like = <ThumbUpIcon />;
-  } else {
-    like = <ThumbUpOutlinedIcon />;
-  }
+const Post = ({ postData }) => {
+  if (!postData) return <NoPost />;
+
   const classes = useStyles();
+
+  /* 
+  const token = Cookies.get("token");
+  let followJson = [];
+
+  if (token) {
+    try {
+      let data = jwt.decode(token);
+      
+      console.log("http://localhost:3001/postlikes/" +
+      postData.Id +
+      "/" +
+      data.Id);
+
+      const res = await axios.get(
+        "http://localhost:3001/postlikes/" +
+          postData.Id +
+          "/" +
+          data.Id,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      followJson = res.data;
+      //console.log(followJson);
+    } catch (error) {
+      console.log(error);
+    }
+  } */
+
+  const [like, setLike] = useState(0);
+
+  const handleClickLike = () => {
+    const token = Cookies.get("token");
+    if (!token) return;
+
+    let data = jwt.decode(token);
+
+    let body = {
+      PostId: postData.Id,
+      UserId: data.Id,
+    };
+
+    axios
+      .post("http://localhost:3001/postlikes/", body, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(function (response) {
+        setLike(1);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleClickDislike = () => {
+    const token = Cookies.get("token");
+    if (!token) return;
+
+    let data = jwt.decode(token);
+
+    axios
+      .delete(
+        "http://localhost:3001/postlikes/" + postData[0].Id + "/" + data.Id,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then(function (response) {
+        setLike(0);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     <Container component="main">
       <CssBaseline />
       <div className={classes.paper}>
         <Card className={classes.card}>
           <CardContent className={classes.content}>
-            <Typography className={"MuiTypography--heading"} variant={"h6"}>
-              {props.ctx.Title}
-            </Typography>
+            <Link href={"/post/" + postData.Id}>
+              <Typography className={"MuiTypography--heading"} variant={"h6"}>
+                {postData.Title}
+              </Typography>
+            </Link>
             <Grid container spacing={3}>
               <Grid item xs={4}>
                 <Typography
                   className={"MuiTypography--subheading"}
                   variant={"caption"}
                 >
-                  By {props.ctx.Username}
+                  By {postData.Username}
                 </Typography>
               </Grid>
               <Grid item xs={5}>
@@ -88,7 +172,9 @@ const Post = (props) => {
                   className={"MuiTypography--subheading"}
                   variant={"caption"}
                 >
-                  {dateFormat(props.ctx.Date, "longDate")}
+                  {!isNaN(Date.parse(postData.Date))
+                  ? dateFormat(postData.Date, "dd/mm/yyyy HH:MM")
+                  : ""}
                 </Typography>
               </Grid>
             </Grid>
@@ -104,40 +190,60 @@ const Post = (props) => {
               className={"MuiTypography--subheading"}
               variant={"caption"}
             >
-              {props.ctx.Description}
+              {postData.Description}
             </Typography>
             <Divider className={classes.divider} light />
             <Grid container spacing={3}>
               <Grid item xs={6}>
-                <Typography
-                  className={"MuiTypography--subheading"}
-                  variant={"caption"}
-                >
-                  {like}
-                  <span>15 m likes</span>
-                </Typography>
+                <Like
+                  like={like}
+                  numLikes={postData.Likes}
+                  likeFunc={handleClickLike}
+                  dislikeFunc={handleClickDislike}
+                />
               </Grid>
               <Grid item xs={6}>
-                <Typography
-                  className={"MuiTypography--subheading"}
-                  variant={"caption"}
-                >
-                  <ChatBubbleIcon />
-                  <div className={classes.likesComment}>
-                    
-                    15 comments
-                  </div>
-                </Typography>
+                <Container className={classes.button}>
+                  <Button disabled startIcon={<ChatBubbleIcon />}>
+                    {postData.Comments} comments
+                  </Button>
+                </Container>
               </Grid>
             </Grid>
-            {/* {faces.map((face) => (
-              <Avatar className={classes.avatar} key={face} src={face} />
-            ))} */}
           </CardContent>
         </Card>
       </div>
     </Container>
   );
 };
+
+/* Post.getInitialProps = async ({ query }) => {
+  const token = context.req ? context.req.cookies.token : Cookies.get("token");
+  let followJson = [];
+
+  if (token) {
+    try {
+      let data = jwt.decode(token);
+
+      const res = await axios.get(
+        "http://localhost:3001/pagefollows/" +
+          data.Id +
+          "/" +
+          context.query.pageId,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      followJson = res.data;
+      console.log(followJson);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}; */
 
 export default Post;
