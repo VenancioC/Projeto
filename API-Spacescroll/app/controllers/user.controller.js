@@ -111,7 +111,7 @@ exports.update = (req, res) => {
       }
     } else
       res.status(200).send({
-        message: err.message || "User successfully updated!",
+        message: "User successfully updated!",
       });
   });
 };

@@ -49,7 +49,9 @@ Post.getAll = (result) => {
 
 Post.findById = (postId, result) => {
   console.log(postId);
-  sql.query("SELECT * FROM Post WHERE id =?", [postId], (err, res) => {
+  sql.query(`SELECT p.*, u.Username FROM Post p
+      inner join user u on u.Id  = p.UserId 
+      WHERE p.id =?`, [postId], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -65,35 +67,6 @@ Post.findById = (postId, result) => {
     // not found Post with the id
     result({ kind: "not_found" }, null);
   });
-};
-
-Post.getFeedByUser = (userId, result) => {
-  console.log(userId);
-  sql.query(
-    `select pt.*, pg.Name, u.Username from user u
-    inner join pagefollows pf on pf.UserId = u.Id 
-    inner join page pg on pg.Id = pf.PageId 
-    inner join post pt on pt.PageId = pg.Id 
-    where u.Id =?
-    order by pt.Date desc`,
-    [userId],
-    (err, res) => {
-      if (err) {
-        console.log("error: ", err);
-        result(err, null);
-        return;
-      }
-
-      if (res.length) {
-        console.log("found Post: ", res);
-        result(null, res);
-        return;
-      }
-
-      // not found Post in Feed
-      result({ kind: "not_found" }, null);
-    }
-  );
 };
 
 Post.getFeedByUser = (userId, result) => {

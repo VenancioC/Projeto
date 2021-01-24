@@ -66,7 +66,9 @@ Comment.findById = (commentId, result) => {
 
 Comment.findByPostId = (postId, result) => {
   console.log(postId);
-  sql.query("SELECT * FROM Comment WHERE PostId =? ORDER BY Date DESC"
+  sql.query(`SELECT c.*, u.Username FROM Comment c
+            inner join User u on u.Id = c.UserId 
+            WHERE PostId =? ORDER BY Date DESC`
     , [postId]
     , (err, res) => {
       if (err) {
