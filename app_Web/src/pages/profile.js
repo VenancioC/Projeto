@@ -59,7 +59,7 @@ export default function Profile({ Userdata }) {
   }, [Cookies.get("token")]);
 
   const redirect = () => {
-    router.push("./updateprofile");
+    router.push("./profileForm");
   };
 
   const classes = useStyles();

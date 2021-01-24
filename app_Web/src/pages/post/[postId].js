@@ -1,27 +1,13 @@
-//import {  }
 import {
-  Avatar,
-  Button,
   CssBaseline,
-  TextField,
-  FormControlLabel,
-  Checkbox,
-  Link,
-  Paper,
   Grid,
-  Typography,
   Container,
 } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState, Router } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
-import { useFormik } from "formik";
 import Post from "../../components/Post";
 import Comment from "../../components/Comment";
 import CreateComment from "../../components/CreateComment";
-import { useRouter } from "next/router";
 import Navbar from "../../components/Navbar";
 
 const useStyles = makeStyles((theme) => ({

@@ -9,7 +9,6 @@ import jwt from "jsonwebtoken";
 import Follow from "../../components/Follow";
 import Navbar from "../../components/Navbar";
 
-
 const useStyles = makeStyles((theme) => ({
   image: {
     backgroundImage: "url(https://source.unsplash.com/random)",
@@ -72,7 +71,6 @@ export default function PostPage({ pageData, postData, followData }) {
 
     let data = jwt.decode(token);
 
-    
     axios
       .delete(
         "http://localhost:3001/pagefollows/" + data.Id + "/" + pageData[0].Id,
@@ -95,14 +93,16 @@ export default function PostPage({ pageData, postData, followData }) {
       <Navbar />
       <Container component="main">
         <div>
-          <h1>{pageData[0].Name}</h1>
-          {Cookies.get("token") && (
-            <Follow
-              isFollow={isFollow}
-              followFunc={handleClickFollow}
-              unFollowFunc={handleClickUnFollow}
-            />
-          )}
+          <h1>
+            {pageData[0].Name}
+            {Cookies.get("token") && (
+              <Follow
+                isFollow={isFollow}
+                followFunc={handleClickFollow}
+                unFollowFunc={handleClickUnFollow}
+              />
+            )}
+          </h1>
         </div>
 
         <div>{pageData[0].Description}</div>

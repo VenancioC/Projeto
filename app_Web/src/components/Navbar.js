@@ -93,7 +93,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   buttonsAuth: {
-    marginLeft: "15px", 
+    marginLeft: "15px",
   },
 }));
 
@@ -101,6 +101,7 @@ const Navbar = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorCreate, setanchorCreate] = React.useState(null);
+  const router = useRouter();
 
   const token = Cookies.get("token");
 
@@ -121,6 +122,12 @@ const Navbar = () => {
     setanchorCreate(null);
   };
 
+  const handleClickSignout = () => {
+    Cookies.remove("token");
+
+    router.push("/signin");
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -135,7 +142,7 @@ const Navbar = () => {
       <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
         <Link href="./profile">Profile</Link>
       </MenuItem>
-      <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
+      <MenuItem onClick={handleClickSignout} className={classes.ClearLink}>
         Signout
       </MenuItem>
     </Menu>
@@ -153,10 +160,10 @@ const Navbar = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
-        <Link href="./PagesForm">Create Page</Link>
+        <Link href="/PagesForm">Create Page</Link>
       </MenuItem>
       <MenuItem onClick={handleMenuClose} className={classes.ClearLink}>
-        <Link href="./PublicationForm">Create Post</Link>
+        <Link href="/PublicationForm">Create Post</Link>
       </MenuItem>
     </Menu>
   );
@@ -212,10 +219,20 @@ const Navbar = () => {
             </IconButton>
           ) : (
             <div>
-              <Button variant="contained" color="default" href="/auth/signin" className={ classes.buttonsAuth }>
+              <Button
+                variant="contained"
+                color="default"
+                href="/signin"
+                className={classes.buttonsAuth}
+              >
                 Sign in
               </Button>
-              <Button variant="contained" color="default" href="/auth/signup" className={ classes.buttonsAuth }>
+              <Button
+                variant="contained"
+                color="default"
+                href="/signup"
+                className={classes.buttonsAuth}
+              >
                 Sign up
               </Button>
             </div>
