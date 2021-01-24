@@ -49,9 +49,10 @@ Post.getAll = (result) => {
 
 Post.findById = (postId, result) => {
   console.log(postId);
-  sql.query(`SELECT p.*, u.Username FROM Post p
-      inner join user u on u.Id  = p.UserId 
-      WHERE p.id =?`, [postId], (err, res) => {
+  sql.query(`SELECT p.*, pg.Name, u.Username FROM Post p
+    inner join user u on u.Id  = p.UserId 
+    inner join page pg on pg.Id = p.PageId 
+    WHERE p.id =?`, [postId], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
