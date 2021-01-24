@@ -159,7 +159,17 @@ const Post = ({ postData }) => {
               </Typography>
             </Link>
             <Grid container spacing={3}>
-              <Grid item xs={4}>
+              <Grid item xs={3}>
+                <Link href={"/page/" + postData.PageId}>
+                  <Typography
+                    className={"MuiTypography--subheading"}
+                    variant={"caption"}
+                  >
+                    In {postData.Name}
+                  </Typography>
+                </Link>
+              </Grid>
+              <Grid item xs={3}>
                 <Typography
                   className={"MuiTypography--subheading"}
                   variant={"caption"}
@@ -167,14 +177,14 @@ const Post = ({ postData }) => {
                   By {postData.Username}
                 </Typography>
               </Grid>
-              <Grid item xs={5}>
+              <Grid item xs={6}>
                 <Typography
                   className={"MuiTypography--subheading"}
                   variant={"caption"}
                 >
                   {!isNaN(Date.parse(postData.Date))
-                  ? dateFormat(postData.Date, "dd/mm/yyyy HH:MM")
-                  : ""}
+                    ? dateFormat(postData.Date, "dd/mm/yyyy HH:MM")
+                    : ""}
                 </Typography>
               </Grid>
             </Grid>
