@@ -70,11 +70,11 @@ export default function PostPage({ postData, commentData, message }) {
 }
 
 PostPage.getInitialProps = async ({ query }) => {
-  const postRes = await fetch("http://localhost:3001/posts/" + query.postId);
+  const postRes = await fetch(process.env.API_URL + "/posts/" + query.postId);
   const postJson = await postRes.json();
 
   const commentRes = await fetch(
-    "http://localhost:3001/comments/posts/" + query.postId
+    process.env.API_URL + "/comments/posts/" + query.postId
   );
 
   const commentJson = await commentRes.json();

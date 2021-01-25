@@ -50,7 +50,7 @@ export default function PostPage({ pageData, postData, followData }) {
     };
 
     axios
-      .post("http://localhost:3001/pagefollows/", body, {
+      .post(process.env.API_URL + "/pagefollows/", body, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default function PostPage({ pageData, postData, followData }) {
 
     axios
       .delete(
-        "http://localhost:3001/pagefollows/" + data.Id + "/" + pageData[0].Id,
+        process.env.API_URL + "/pagefollows/" + data.Id + "/" + pageData[0].Id,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -121,12 +121,12 @@ export default function PostPage({ pageData, postData, followData }) {
 
 PostPage.getInitialProps = async (context) => {
   const pageRes = await fetch(
-    "http://localhost:3001/pages/" + context.query.pageId
+    process.env.API_URL + "/pages/" + context.query.pageId
   );
   const pageJson = await pageRes.json();
 
   const postRes = await fetch(
-    "http://localhost:3001/posts/page/" + context.query.pageId
+    process.env.API_URL + "/posts/page/" + context.query.pageId
   );
   const postJson = await postRes.json();
 
@@ -138,7 +138,7 @@ PostPage.getInitialProps = async (context) => {
       let data = jwt.decode(token);
 
       const res = await axios.get(
-        "http://localhost:3001/pagefollows/" +
+        process.env.API_URL + "/pagefollows/" +
           data.Id +
           "/" +
           context.query.pageId,

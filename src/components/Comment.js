@@ -69,7 +69,7 @@ const Comment = ({ commentData }) => {
       if (!token) return;
 
       axios
-        .put("http://localhost:3001/comments/" + commentData.Id, values, {
+        .put(process.env.API_URL + "/comments/" + commentData.Id, values, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -90,7 +90,7 @@ const Comment = ({ commentData }) => {
     if (!token) return;
 
     axios
-      .delete("http://localhost:3001/comments/" + commentData.Id, {
+      .delete(process.env.API_URL + "/comments/" + commentData.Id, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -112,7 +112,7 @@ Profile.getInitialProps = async (context) => {
   let datas = jwt.decode(token);
 
   if (token) {
-    const res = await axios.get("http://localhost:3001/users/" + datas.Id, {
+    const res = await axios.get(process.env.API_URL + "/users/" + datas.Id, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

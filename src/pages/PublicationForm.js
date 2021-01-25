@@ -73,7 +73,7 @@ export default function PublicationForm({ pagesData }) {
       values.UserId = datas.Id;
 
       axios
-        .post("http://localhost:3001/posts", values, {
+        .post(process.env.API_URL + "/posts", values, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -184,7 +184,7 @@ export default function PublicationForm({ pagesData }) {
   );
 }
 PublicationForm.getInitialProps = async () => {
-  const res = await fetch("http://localhost:3001/pages");
+  const res = await fetch(process.env.API_URL + "/pages");
   const json = await res.json();
   return { pagesData: json };
 };

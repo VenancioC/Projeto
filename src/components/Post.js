@@ -70,13 +70,13 @@ const Post = ({ postData }) => {
     try {
       let data = jwt.decode(token);
       
-      console.log("http://localhost:3001/postlikes/" +
+      console.log(process.env.API_URL + "/postlikes/" +
       postData.Id +
       "/" +
       data.Id);
 
       const res = await axios.get(
-        "http://localhost:3001/postlikes/" +
+        process.env.API_URL + "/postlikes/" +
           postData.Id +
           "/" +
           data.Id,
@@ -109,7 +109,7 @@ const Post = ({ postData }) => {
     };
 
     axios
-      .post("http://localhost:3001/postlikes/", body, {
+      .post(process.env.API_URL + "/postlikes/", body, {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ const Post = ({ postData }) => {
 
     axios
       .delete(
-        "http://localhost:3001/postlikes/" + postData[0].Id + "/" + data.Id,
+        process.env.API_URL + "/postlikes/" + postData[0].Id + "/" + data.Id,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -236,7 +236,7 @@ const Post = ({ postData }) => {
       let data = jwt.decode(token);
 
       const res = await axios.get(
-        "http://localhost:3001/pagefollows/" +
+        process.env.API_URL + "/pagefollows/" +
           data.Id +
           "/" +
           context.query.pageId,

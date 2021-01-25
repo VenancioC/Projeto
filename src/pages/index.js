@@ -45,10 +45,10 @@ Index.getInitialProps = async (context) => {
   let json = [];
   let data = jwt.decode(token);
   if (!token) {
-    const res = await axios.get("http://localhost:3001/posts/recent");
+    const res = await axios.get(process.env.API_URL + "/posts/recent");
     json = res.data;
   } else {
-    const res = await axios.get("http://localhost:3001/posts/user/" + data.Id, {
+    const res = await axios.get(process.env.API_URL + "/posts/user/" + data.Id, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
