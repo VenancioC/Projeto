@@ -84,7 +84,7 @@ export default function SignInSide() {
       console.log(values);
 
       axios
-        .post("http://localhost:3001/auth/signin", values)
+        .post(process.env.API_URL + "/auth/signin", values)
         .then(function (response) {
           console.log(response.data);
 

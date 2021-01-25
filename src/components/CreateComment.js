@@ -82,7 +82,7 @@ const CreateComment = ({ postData }) => {
       values.PostId = postData.Id;
 
       axios
-        .post("http://localhost:3001/comments/", values, {
+        .post(process.env.API_URL + "/comments/", values, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

@@ -69,7 +69,7 @@ export default function PagesForm() {
       values.UserId = datas.Id;
       console.log(values);
       axios
-        .post("http://localhost:3001/pages", values, {
+        .post(process.env.API_URL + "/pages", values, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",

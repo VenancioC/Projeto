@@ -101,7 +101,7 @@ export default function profileForm({ Userdata }) {
       let datas = jwt.decode(Cookies.get("token"));
 
       axios
-        .put("http://localhost:3001/users/" + datas.Id, values, {
+        .put(process.env.API_URL + "/users/" + datas.Id, values, {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
@@ -249,7 +249,7 @@ profileForm.getInitialProps = async (context) => {
   console.log(token);
   //console.log(ctx);
   if (token) {
-    const res = await axios.get("http://localhost:3001/users/" + datas.Id, {
+    const res = await axios.get(process.env.API_URL + "/users/" + datas.Id, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
